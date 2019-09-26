@@ -23,6 +23,11 @@
 
                 <div class="card">
                     <div class="card-body">
+                        <h5 class="card-title">Task App Login</h5>
+                        <p class="card-text">
+                            <strong>Email:</strong> demo@gmail.com<br>
+                            <strong>Password:</strong> password<br>
+                        </p>
                         <form id="auth-form">
                             <div class="form-group">
                                 <input id="auth-email" name="email" type="text" class="form-control"
