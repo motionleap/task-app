@@ -39,6 +39,10 @@
                             </div>
                             <button type="submit" id="auth-submit" class="btn btn-primary">Login</button>
                         </form>
+                        <p class="card-text">
+                            GitHub:
+                            <a href="https://github.com/motionleap/task-app" target="_blank">motionleap/task-app</a>
+                        </p>
                     </div>
                 </div>
             </div>
