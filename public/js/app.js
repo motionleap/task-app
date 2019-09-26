@@ -176,10 +176,11 @@
 
   function editTask(taskItem, index) {
     taskItem.classList.remove('d-flex');
-    taskItem.innerHTML = "\n                <div class=\"form-row\">\n                    <div class=\"col-8\">\n                        <input type=\"text\" class=\"form-control task-description\" placeholder=\"Task Description\" value=\"".concat(tasks[index].name, "\">\n                    </div>\n                    <div class=\"col-4\">\n                        <div class=\"input-group\">\n                            <input type=\"date\" class=\"form-control task-due-date\" placeholder=\"Date Due\">\n                            <div class=\"input-group-append\">\n                                <button class=\"btn btn-success update-task-button\" type=\"submit\">Update Task</button>\n                            </div>\n                        </div>\n                    </div>\n                </div>");
+    taskItem.innerHTML = "\n            <form class=\"update-task-form\">\n                <div class=\"form-row\">\n                    <div class=\"col-8\">\n                        <input type=\"text\" class=\"form-control task-description\" placeholder=\"Task Description\" value=\"".concat(tasks[index].name, "\">\n                    </div>\n                    <div class=\"col-4\">\n                        <div class=\"input-group\">\n                            <input type=\"date\" class=\"form-control task-due-date\" placeholder=\"Date Due\">\n                            <div class=\"input-group-append\">\n                                <button class=\"btn btn-success update-task-button\" type=\"submit\">Update Task</button>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </form>");
     var date = new Date(tasks[index].due_at);
     taskItem.getElementsByClassName('task-due-date')[0].value = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
-    taskItem.getElementsByClassName('update-task-button')[0].addEventListener('click', function () {
+    taskItem.getElementsByClassName('update-task-form')[0].addEventListener('submit', function (e) {
+      e.preventDefault();
       var task = makeTask(taskItem);
 
       if (task === false) {
@@ -359,7 +360,8 @@
 
   function init() {
     resetTaskForm();
-    document.getElementById('auth-submit').addEventListener('click', function () {
+    document.getElementById('auth-form').addEventListener('submit', function (e) {
+      e.preventDefault();
       authenticate();
     });
     document.getElementById('auth-logout').addEventListener('click', function () {
@@ -375,8 +377,9 @@
         applyFilters();
       });
     });
-    document.getElementById('create-task-button').addEventListener('click', function () {
-      addTask(document.getElementById('add-task'));
+    document.getElementById('create-task-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      addTask(this);
     });
     document.getElementById('task-sort').addEventListener('change', function () {
       sortByDueDate = this.checked;
@@ -411,8 +414,8 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Applications/MAMP/htdocs/development/Simplify3D/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/development/Simplify3D/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Applications/MAMP/htdocs/development/task-app/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/development/task-app/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

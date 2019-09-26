@@ -105,6 +105,7 @@
     function editTask(taskItem, index) {
         taskItem.classList.remove('d-flex');
         taskItem.innerHTML = `
+            <form class="update-task-form">
                 <div class="form-row">
                     <div class="col-8">
                         <input type="text" class="form-control task-description" placeholder="Task Description" value="${tasks[index].name}">
@@ -117,12 +118,14 @@
                             </div>
                         </div>
                     </div>
-                </div>`;
+                </div>
+            </form>`;
 
         var date = new Date(tasks[index].due_at);
         taskItem.getElementsByClassName('task-due-date')[0].value = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
 
-        taskItem.getElementsByClassName('update-task-button')[0].addEventListener('click', function () {
+        taskItem.getElementsByClassName('update-task-form')[0].addEventListener('submit', function (e) {
+            e.preventDefault();
             var task = makeTask(taskItem);
 
             if (task === false) {
@@ -299,7 +302,8 @@
 
         resetTaskForm();
 
-        document.getElementById('auth-submit').addEventListener('click', function () {
+        document.getElementById('auth-form').addEventListener('submit', function (e) {
+            e.preventDefault();
             authenticate();
         });
 
@@ -319,8 +323,9 @@
             });
         });
 
-        document.getElementById('create-task-button').addEventListener('click', function () {
-            addTask(document.getElementById('add-task'));
+        document.getElementById('create-task-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            addTask(this);
         });
 
         document.getElementById('task-sort').addEventListener('change', function () {
