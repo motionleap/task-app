@@ -1,3 +1,6 @@
+/**
+ * Application Vanilla ES5 Compatibility
+ */
 (function () {
     'use strict';
 

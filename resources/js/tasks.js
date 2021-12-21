@@ -1,3 +1,7 @@
+/**
+ * TODO: Converting to component based methodology
+ */
+
 const Task = function() {
     let task = {
         id: null,
