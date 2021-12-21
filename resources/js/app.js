@@ -8,6 +8,11 @@
     var taskFilters = document.getElementById('task-filters').getElementsByTagName('input');
     var sortByDueDate = false;
 
+    /**
+     * Render task list.
+     *
+     * @param tasks
+     */
     function renderTasks(tasks) {
 
         sortTasks();
@@ -80,6 +85,12 @@
         resultsMessage();
     }
 
+    /**
+     * Set the status of a task item.
+     *
+     * @param taskItem
+     * @param index
+     */
     function setStatus(taskItem, index) {
         if (tasks[index].deleted) {
             taskItem.classList.add('task-deleted');
@@ -102,6 +113,12 @@
         }
     }
 
+    /**
+     * Edit task item.
+     *
+     * @param taskItem
+     * @param index
+     */
     function editTask(taskItem, index) {
         taskItem.classList.remove('d-flex');
         taskItem.innerHTML = `
@@ -136,6 +153,9 @@
         });
     }
 
+    /**
+     * Get tasks and send to render.
+     */
     function getTasks() {
         request('GET', 'tasks', [], function (response) {
             tasks = response.tasks;
@@ -143,6 +163,12 @@
         });
     }
 
+    /**
+     * Make a task item.
+     *
+     * @param scope
+     * @returns {{name: *, due_at: *}|boolean}
+     */
     function makeTask(scope) {
         var name = scope.getElementsByClassName('task-description')[0].value;
         var date = scope.getElementsByClassName('task-due-date')[0].value;
@@ -156,6 +182,12 @@
         };
     }
 
+    /**
+     * Add a task item.
+     *
+     * @param scope
+     * @returns {boolean}
+     */
     function addTask(scope) {
         var task = makeTask(scope);
 
@@ -170,6 +202,13 @@
         });
     }
 
+    /**
+     * Update task item.
+     *
+     * @param id
+     * @param index
+     * @param task
+     */
     function updateTask(id, index, task) {
         request('PUT', 'tasks/' + id, task, function (response) {
             tasks[index] = response;
@@ -177,6 +216,12 @@
         });
     }
 
+    /**
+     * (soft) delete task item.
+     *
+     * @param id
+     * @param index
+     */
     function deleteTask(id, index) {
         request('DELETE', 'tasks/' + id, [], function (response) {
             tasks[index].deleted = true;
@@ -184,6 +229,12 @@
         });
     }
 
+    /**
+     * Restore task item.
+     *
+     * @param id
+     * @param index
+     */
     function restoreTask(id, index) {
         request('PUT', 'tasks/' + id, {deleted_at: null}, function (response) {
             tasks[index] = response;
@@ -191,6 +242,9 @@
         });
     }
 
+    /**
+     * Sort tasks (bubble sort).
+     */
     function sortTasks() {
         if (sortByDueDate === true) {
             tasks.sort(function (a, b) {
@@ -203,6 +257,9 @@
         }
     }
 
+    /**
+     * Apply filters to task list.
+     */
     function applyFilters() {
         Array.from(taskFilters).forEach(function (el) {
             if (el.checked) {
@@ -214,6 +271,9 @@
         resultsMessage();
     }
 
+    /**
+     * Result message.
+     */
     function resultsMessage() {
         var el = document.getElementById('no-results-message');
         if (taskList.offsetHeight === 0) {
@@ -223,6 +283,11 @@
         }
     }
 
+    /**
+     * Search query filter task list.
+     *
+     * @param query
+     */
     function searchFilter(query) {
         tasks.forEach(function (task) {
             task.hide = (!task.name.toLowerCase().includes(query.toLowerCase()));
@@ -231,6 +296,11 @@
         renderTasks(tasks);
     }
 
+    /**
+     * Check to see if the current user is authenticated.
+     *
+     * @param callback
+     */
     function isAuthenticated(callback) {
         request('POST', 'authenticate', [], function (response) {
             document.getElementById('app').classList.remove('loading');
@@ -242,6 +312,9 @@
         });
     }
 
+    /**
+     * Authenticate current user.
+     */
     function authenticate() {
         var login = {
             email: document.getElementById('auth-email').value,
@@ -261,16 +334,30 @@
         });
     }
 
+    /**
+     * Authentication guard.
+     */
     function authenticationGuard() {
         document.getElementById('app').classList.remove('authenticated');
     }
 
+    /**
+     * Log current user out.
+     */
     function logout() {
         request('POST', 'logout', [], function () {
             authenticationGuard();
         });
     }
 
+    /**
+     * HTTP Request.
+     *
+     * @param verb
+     * @param path
+     * @param data
+     * @param callback
+     */
     function request(verb, path, data, callback) {
         var xhr = new XMLHttpRequest();
         var csrfToken = document.querySelector('meta[name=csrf_token]').getAttribute('content');
@@ -292,12 +379,18 @@
         xhr.send(JSON.stringify(data));
     }
 
+    /**
+     * Reset task form.
+     */
     function resetTaskForm() {
         var date = new Date();
         document.getElementsByClassName('task-due-date')[0].value = date.getFullYear().toString() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
         document.getElementsByClassName('task-description')[0].value = '';
     }
 
+    /**
+     * Initialize the application.
+     */
     function init() {
 
         resetTaskForm();
